@@ -19,6 +19,8 @@ package leetcode.editor.cn;
 
 import leetcode.editor.cn.node.ListNode;
 
+import java.util.Stack;
+
 //Java：从尾到头打印链表
 class CongWeiDaoTouDaYinLianBiaoLcof{
     public static void main(String[] args) {
@@ -51,23 +53,35 @@ class CongWeiDaoTouDaYinLianBiaoLcof{
 
 class Solution {
     public int[] reversePrint(ListNode head) {
-        int[] a = new int[10001];
-        int x = 0;
+        //int[] a = new int[10001];
+        //int x = 0;
+        //
+        //while (head != null) {
+        //    a[x++] = head.getVal();
+        //    head = head.getNext();
+        //}
+        //
+        //int[] b = new int[x];
+        //
+        //for (int i = 0, j = x - 1; i < x; i++, j--) {
+        //    b[i] = a[j];
+        //}
+        //return b;
 
-        while (head != null) {
-            a[x++] = head.getVal();
+        /**
+         * 用栈实现
+         */
+        Stack<Integer> stack = new Stack<>();
+        while (head!=null) {
+            stack.push(head.getVal());
             head = head.getNext();
         }
-
-        int[] b = new int[x];
-
-        for (int i = 0, j = x - 1; i < x; i++, j--) {
-            //int temp = a[i];
-            //a[i] = a[j];
-            //a[j] = temp;
-            b[i] = a[j];
+        int[] a = new int[stack.size()];
+        int x = 0;
+        while (!stack.isEmpty()) {
+            a[x++] = stack.pop();
         }
-        return b;
+        return a;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
