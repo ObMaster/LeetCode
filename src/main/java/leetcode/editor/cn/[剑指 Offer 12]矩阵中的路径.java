@@ -46,17 +46,84 @@ package leetcode.editor.cn;
 //Java：矩阵中的路径
 class JuZhenZhongDeLuJingLcof{
     public static void main(String[] args) {
+        char a1 = '\0';
+        char a2 = '\u0000';
+        System.out.println(a1 == a2);
+        System.out.println(a1 == ' ');
+        System.out.println('\0');
+        System.out.println(' ');
+        System.out.println('\u0000');
+        System.out.println('\u0020');
         Solution solution = new JuZhenZhongDeLuJingLcof().new Solution();
-        // TO TEST
+        char[][] board = {{'a', 'b'}};
+        String word = "ba";
+        System.out.println(solution.exist(board, word));
+
     }
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    int m, n;
+    boolean[][] flag;
+    String word;
+    int len;
     public boolean exist(char[][] board, String word) {
-
+        if (board == null)  return false;
+        m = board.length;
+        if (m == 0) return false;
+        n = board[0].length;
+        flag = new boolean[m][n];
+        this.word = word;
+        len = word.length();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dfs(board, i, j, 0))
+                    return true;
+            }
+        }
         return false;
     }
-}
+
+    /**
+     * 通过数组标记状态
+     * @param board
+     * @param i
+     * @param j
+     * @param w
+     * @return
+     */
+    private boolean dg(char[][] board, int i, int j, int w) {
+        if (w >= len)   return true;
+        if (i < 0 || i >= m || j < 0 || j >= n)   return false;
+        boolean hasPath = false;
+        if (board[i][j] == word.charAt(w) && !flag[i][j]) {
+            flag[i][j] = true;
+
+            hasPath = dg(board, i - 1, j, w + 1) ||     // 上
+                      dg(board, i, j - 1, w + 1) ||     // 左
+                      dg(board, i + 1, j, w + 1) ||     // 下
+                      dg(board, i, j + 1, w + 1);       // 右
+            if (!hasPath) flag[i][j] = false;
+        }
+        return hasPath;
+    }
+
+    /**
+     * 通过将当前已匹配的字符设置为空字符''来实现状态
+     */
+    private boolean dfs(char[][] board, int i, int j, int w) {
+        if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] != word.charAt(w))   return false;
+        if (w == len)   return true;
+        boolean hasPath;
+        board[i][j] = ' ';
+        hasPath = dg(board, i - 1, j, w + 1) ||     // 上
+                dg(board, i, j - 1, w + 1) ||     // 左
+                dg(board, i + 1, j, w + 1) ||     // 下
+                dg(board, i, j + 1, w + 1);       // 右
+        board[i][j] = word.charAt(w);
+        return hasPath;
+    }
+    }
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
